@@ -24,7 +24,7 @@ public class PlayerScr : MonoBehaviour
     float verticalInput;
 
     Vector2 moveDireciton;
-    Rigidbody2D rb;
+    [HideInInspector]public Rigidbody2D rb;
     Transform playerTrans;
 
     /// <summary>
@@ -35,7 +35,7 @@ public class PlayerScr : MonoBehaviour
     public float waterStorage;
     public float waterStorageCap;
     public float waterUptakeSpeed;
-
+    private bool canAbsorb;
     /// <summary>
     /// Shoot
     /// </summary>
@@ -113,12 +113,18 @@ public class PlayerScr : MonoBehaviour
         CheckMoveState();
         ChangeState();
         ChangeAnim();
+        canAbsorb = !Input.GetMouseButton(0)&&!!Input.GetMouseButton(1)&&moveDireciton!=Vector2.zero;
         if (Input.GetKey(KeyCode.R))
         {
-            WaterUptake();
+            if (canAbsorb)
+            {
+                WaterUptake();
+            }
+            
         }
         if (Input.GetMouseButton(0))
         {
+            
             Shoot();
             //GenerateLineRender();
         }
@@ -195,7 +201,7 @@ public class PlayerScr : MonoBehaviour
             Water nearbyWater = collider.gameObject.GetComponent<Water>(); //Get Water Script from this collider
             if (nearbyWater != null)
             {
-                if (nearbyWater.storage > 0)
+                if (nearbyWater.storage > 0&&waterStorage<waterStorageCap)
                 {
                     waterStorage += waterUptakeSpeed * Time.deltaTime;
                     nearbyWater.storage -= waterUptakeSpeed * Time.deltaTime;
@@ -265,5 +271,10 @@ public class PlayerScr : MonoBehaviour
         line.positionCount = waterBulletPos.Count;
         line.SetPositions(pos);
         
+    }
+
+    public void TakeDamage(float damage)
+    {
+        currentHP -= damage;
     }
 }
