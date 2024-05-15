@@ -22,6 +22,7 @@ public class Enemy_OnionRing : Enemy
     // Start is called before the first frame update
     new void Start()
     {
+        currentEnemyActionState = EnemyActionState.Move;
         base.Start();
     }
 
@@ -30,7 +31,7 @@ public class Enemy_OnionRing : Enemy
     {
         if (currentEnemyState == EnemyState.Patrol)
         {
-            Movement();
+            Patrol();
         }
         if (currentEnemyState == EnemyState.Chase)
         {
@@ -47,7 +48,7 @@ public class Enemy_OnionRing : Enemy
         }
         attackTimeCount += Time.deltaTime;
         SearchPlayer();
-
+        MoveState();
     }
 
     IEnumerator AttackDelay()
@@ -66,11 +67,11 @@ public class Enemy_OnionRing : Enemy
         }
         yield return new WaitForSeconds(0.5f);
         GameObject bullet1 = Instantiate(bullet, transform.position, Quaternion.identity);
-        bullet1.GetComponent<OnionRingBullet>().direction = bullet1TargetPos.transform.position - transform.position;
+        bullet1.GetComponent<OnionRingBullet>().direction = (bullet1TargetPos.transform.position - transform.position).normalized;
         GameObject bullet2 = Instantiate(bullet, transform.position, Quaternion.identity);
-        bullet2.GetComponent<OnionRingBullet>().direction = bullet2TargetPos.transform.position - transform.position;
+        bullet2.GetComponent<OnionRingBullet>().direction = (bullet2TargetPos.transform.position - transform.position).normalized;
         GameObject bullet3 = Instantiate(bullet, transform.position, Quaternion.identity);
-        bullet3.GetComponent<OnionRingBullet>().direction = bullet3TargetPos.transform.position - transform.position;
+        bullet3.GetComponent<OnionRingBullet>().direction = (bullet3TargetPos.transform.position - transform.position).normalized;
         yield return new WaitForSeconds(1.5f);
         if (Vector2.Distance(transform.position, playerScr.transform.position) < detectRange)
         {
@@ -114,7 +115,7 @@ public class Enemy_OnionRing : Enemy
             if(currentEnemyState!=EnemyState.Shoot)
             {
                 currentEnemyState = EnemyState.Patrol;
-                StartCoroutine(PatrolWait(EnemyState.Patrol, 1f));
+                StartCoroutine(IdleWait( 1f));
                 attackTimeCount= 10;
             }
             

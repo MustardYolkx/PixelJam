@@ -14,6 +14,7 @@ public class Enemy_Can : Enemy
     // Start is called before the first frame update
     new void Start()
     {
+        currentEnemyActionState = EnemyActionState.Move;
         base.Start();
     }
 
@@ -22,14 +23,14 @@ public class Enemy_Can : Enemy
     {
         if (currentEnemyState == EnemyState.Patrol)
         {
-            Movement();
+            Patrol();
         }
         if( currentEnemyState == EnemyState.Chase)
         {            
             ChasePlayer(playerScr.transform.position);
         }
         SearchPlayer();
-        
+        MoveState();
     }
 
    private void SearchPlayer()
@@ -66,7 +67,7 @@ public class Enemy_Can : Enemy
             player.rb.AddForce(direction * hitForce,ForceMode2D.Force);
             player.TakeDamage(damage);
             rb.AddForce(-direction * hitForce,ForceMode2D.Force);
-            StartCoroutine(PatrolWait(EnemyState.Chase,attackWaiting));
+            StartCoroutine(IdleWait(attackWaiting));
         }
     }
 }

@@ -12,6 +12,9 @@ public class WaterBulletSingle : MonoBehaviour
     [HideInInspector] public Vector2 direction;
     public float lifeTime;
     public float lineRenderTime;
+
+    public float damage;
+
     private float time;
     private int count;
     public float loseScale;

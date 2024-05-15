@@ -17,6 +17,7 @@ public abstract class Enemy : MonoBehaviour
     /// </summary>
     [Header("Movement")]
     public float moveSpeed = 5;
+    private float currenSpeed;
     public float waitTime = 1;
     public GameObject patrolPoint;
     private MovePoint[] patrolArray;
@@ -30,10 +31,10 @@ public abstract class Enemy : MonoBehaviour
     private Collider2D col;
     
     [HideInInspector] public PlayerScr playerScr;
-
+    private SpriteRenderer sprite;
+    private float localScaleX;
     public enum EnemyState
     {
-        Idle,
         Patrol,
         Alert,
         Chase,
@@ -42,9 +43,18 @@ public abstract class Enemy : MonoBehaviour
         Shoot,
     }
     public EnemyState currentEnemyState;
+
+    public enum EnemyActionState
+    {
+        Idle,
+        Move,
+    }
+    public EnemyActionState currentEnemyActionState;
     // Start is called before the first frame update
     public void Start()
     {
+        sprite = GetComponentInChildren<SpriteRenderer>();
+        localScaleX = sprite.transform.localScale.x;
         rb = GetComponentInChildren<Rigidbody2D>();
         col= GetComponentInChildren<Collider2D>();
         if(patrolPoint!= null)
@@ -62,7 +72,7 @@ public abstract class Enemy : MonoBehaviour
             }
             SetFirstPatrolPoint();
         }
-       
+        currenSpeed = moveSpeed;
         rb.drag= drag;
     }
 
@@ -70,10 +80,47 @@ public abstract class Enemy : MonoBehaviour
     public void Update()
     {
         
-        
+
+
+    }
+    public void FaceToPatrolTarget()
+    {
+        if (transform.position.x < currentTargetPoint.x)
+        {
+            sprite.transform.localScale = new Vector2(localScaleX,sprite.transform.localScale.y);
+        }
+        else
+        {
+            sprite.transform.localScale = new Vector2(-localScaleX, sprite.transform.localScale.y);
+        }
     }
 
-
+    public void FaceToPlayer()
+    {
+        if (playerScr != null)
+        {
+            if (transform.position.x < playerScr.transform.position.x)
+            {
+                sprite.transform.localScale = new Vector2(localScaleX, sprite.transform.localScale.y);
+            }
+            else
+            {
+                sprite.transform.localScale = new Vector2(-localScaleX, sprite.transform.localScale.y);
+            }
+        }
+        
+    }
+    public void MoveState()
+    {
+        if(currentEnemyActionState == EnemyActionState.Idle)
+        {
+            currenSpeed = 0;
+        }
+        else if (currentEnemyActionState == EnemyActionState.Move)
+        {
+            currenSpeed= moveSpeed;
+        }
+    }
 
     public void TakeDamage(float damage)
     {
@@ -120,15 +167,7 @@ public abstract class Enemy : MonoBehaviour
         if(currentEnemyState== EnemyState.Alert)
         {
             currentEnemyState = EnemyState.Chase;
-        }
-        else if(currentEnemyState == EnemyState.Charge)
-        {
-
-        }
-        else if(currentEnemyState == EnemyState.Shoot)
-        {
-
-        }
+        }      
         else 
         {
             currentEnemyState = EnemyState.Patrol;
@@ -171,45 +210,42 @@ public abstract class Enemy : MonoBehaviour
         
 
     }
-    public void Movement()
+    public void Patrol()
     {
-        transform.position = Vector2.MoveTowards(transform.position, currentTargetPoint, moveSpeed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(transform.position, currentTargetPoint, currenSpeed * Time.deltaTime);
         if (Vector2.Distance(currentTargetPoint, transform.position) < 0.1f)
         {
-            StartCoroutine(PatrolWait(EnemyState.Patrol,waitTime));
+            StartCoroutine(IdleWait(waitTime));
             SearchNextPatrolPoint();
         }
     }
 
-    public IEnumerator PatrolWait(EnemyState enemyState,float stayTime)
+    public IEnumerator IdleWait(float stayTime)
     {
-        currentEnemyState = EnemyState.Idle;
+        currentEnemyActionState = EnemyActionState.Idle;
         float time = 0;
         while(time<stayTime)
         {
             time += Time.deltaTime;
             yield return null;
         }
-        if (currentEnemyState != EnemyState.Alert)
-        {
-            currentEnemyState = enemyState;
-        }
+        currentEnemyActionState = EnemyActionState.Move;
         
         
     }
 
-    public IEnumerator AttackWait(EnemyState enemyState, float stayTime)
-    {
-        currentEnemyState = EnemyState.Idle;
-        float time = 0;
-        while (time < stayTime)
-        {
-            time += Time.deltaTime;
-            yield return null;
-        }
-        currentEnemyState = enemyState;
+    //public IEnumerator AttackWait(EnemyState enemyState, float stayTime)
+    //{
+    //    currentEnemyActionState = EnemyActionState.Idle;
+    //    float time = 0;
+    //    while (time < stayTime)
+    //    {
+    //        time += Time.deltaTime;
+    //        yield return null;
+    //    }
+    //    currentEnemyState = enemyState;
 
-    }
+    //}
     #endregion
     public IEnumerator ReadyWait(EnemyState enemyState, float stayTime)
     {
@@ -226,7 +262,7 @@ public abstract class Enemy : MonoBehaviour
     #region Chase
     public void ChasePlayer(Vector2 player)
     {
-        transform.position = Vector2.MoveTowards(transform.position,player, moveSpeed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(transform.position,player, currenSpeed * Time.deltaTime);
     }
     #endregion
 }

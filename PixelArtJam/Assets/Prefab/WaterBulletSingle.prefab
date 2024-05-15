@@ -135,6 +135,7 @@ MonoBehaviour:
   direction: {x: 0, y: 0}
   lifeTime: 1
   lineRenderTime: 0
+  damage: 2
   loseScale: 2
   trace: {fileID: 8761423903142806369, guid: 9a9d40a64857fcb47b9261f025e9da4d, type: 3}
   drag: 0
@@ -184,7 +185,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.32933563, y: 0.32933563}
   m_EdgeRadius: 0
 --- !u!50 &7533350265141614120
 Rigidbody2D:

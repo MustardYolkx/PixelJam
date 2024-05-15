@@ -5,7 +5,8 @@ using UnityEngine;
 public class PlayerScr : MonoBehaviour
 {
     private Camera cam;
-
+    private SpriteRenderer sprite;
+    private float localScaleX;
     /// <summary>
     /// Player Attribute
     /// </summary>
@@ -19,7 +20,7 @@ public class PlayerScr : MonoBehaviour
     public float moveSpeed; // player Speed
     public float goundDrag;
 
-    bool isMovable;
+    [HideInInspector]public bool isMovable;
     float horizonInput;
     float verticalInput;
 
@@ -78,6 +79,8 @@ public class PlayerScr : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        sprite = GetComponentInChildren<SpriteRenderer>();
+        localScaleX = sprite.transform.localScale.x;
         anim = GetComponentInChildren<Animator>();
         cam = FindObjectOfType<Camera>();
         rb = GetComponentInParent<Rigidbody2D>();
@@ -101,6 +104,7 @@ public class PlayerScr : MonoBehaviour
         if(isMovable)
         {
             MovePlayer();
+            SpriteFaceDirection();
         }
         
     }
@@ -113,18 +117,18 @@ public class PlayerScr : MonoBehaviour
         CheckMoveState();
         ChangeState();
         ChangeAnim();
-        canAbsorb = !Input.GetMouseButton(0)&&!!Input.GetMouseButton(1)&&moveDireciton!=Vector2.zero;
-        if (Input.GetKey(KeyCode.R))
-        {
-            if (canAbsorb)
-            {
-                WaterUptake();
-            }
-            
-        }
+        canAbsorb = !Input.GetMouseButton(0)&&!Input.GetMouseButton(1)&&moveDireciton==Vector2.zero;
+
+        
+            WaterUptake();
+
+
+        
+        
+
         if (Input.GetMouseButton(0))
         {
-            
+            CameraShake.Instance.ShakeCameraCustom();
             Shoot();
             //GenerateLineRender();
         }
@@ -133,6 +137,7 @@ public class PlayerScr : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             ShootRightMouse();
+            CameraShake.Instance.ShakeCamera(1f);
             anim.SetTrigger("ShootSingle");
         }
         GenerateLineRender();
@@ -182,6 +187,17 @@ public class PlayerScr : MonoBehaviour
         moveDireciton = playerTrans.up * verticalInput + playerTrans.right * horizonInput;
         rb.AddForce(moveDireciton.normalized * moveSpeed * 10f, ForceMode2D.Force);
     }
+    private void SpriteFaceDirection()
+    {
+        if (horizonInput < 0)
+        {
+            sprite.transform.localScale = new Vector2(-localScaleX,sprite.transform.localScale.y);
+        }
+        else if(horizonInput > 0)
+        {
+            sprite.transform.localScale = new Vector2(localScaleX, sprite.transform.localScale.y);
+        }
+    }
     private void CheckWaterStorage()
     {
         if (waterStorage > waterStorageCap)
@@ -201,15 +217,37 @@ public class PlayerScr : MonoBehaviour
             Water nearbyWater = collider.gameObject.GetComponent<Water>(); //Get Water Script from this collider
             if (nearbyWater != null)
             {
-                if (nearbyWater.storage > 0&&waterStorage<waterStorageCap)
+                if (canAbsorb)                    
                 {
-                    waterStorage += waterUptakeSpeed * Time.deltaTime;
-                    nearbyWater.storage -= waterUptakeSpeed * Time.deltaTime;
+                    if (Input.GetKey(KeyCode.R))                       
+                    {
+                        anim.SetBool("uptakeWater", true);
+                        if (nearbyWater.storage > 0 && waterStorage < waterStorageCap)
+                        {
+                            waterStorage += waterUptakeSpeed * Time.deltaTime;
+                            nearbyWater.storage -= waterUptakeSpeed * Time.deltaTime;
+                        }
+                    }
+                    else
+                    {
+                        anim.SetBool("uptakeWater", false);
+                    }
                 }
-                
+                else
+                {
+                    anim.SetBool("uptakeWater", false);
+                }
+
+            }
+            else
+            {
+                anim.SetBool("uptakeWater", false);
             }
         }
-        
+        else
+        {
+            anim.SetBool("uptakeWater", false);
+        }
     }
 
     private void MousePosCheck()
@@ -275,6 +313,7 @@ public class PlayerScr : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        CameraShake.Instance.ShakeCamera(2);
         currentHP -= damage;
     }
 }

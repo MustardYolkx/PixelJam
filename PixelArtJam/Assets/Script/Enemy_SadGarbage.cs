@@ -19,6 +19,7 @@ public class Enemy_SadGarbage : Enemy
     // Start is called before the first frame update
     new void Start()
     {
+        currentEnemyActionState = EnemyActionState.Move;
         base.Start();
     }
 
@@ -27,7 +28,7 @@ public class Enemy_SadGarbage : Enemy
     {
         if (currentEnemyState == EnemyState.Patrol)
         {
-            Movement();
+            Patrol();
         }
         if (currentEnemyState == EnemyState.Chase)
         {
@@ -43,7 +44,7 @@ public class Enemy_SadGarbage : Enemy
         }
         attackTimeCount += Time.deltaTime;
         SearchPlayer();
-
+        MoveState();
     }
 
     IEnumerator ChargeDelay()
@@ -108,14 +109,14 @@ public class Enemy_SadGarbage : Enemy
                 player.rb.AddForce(direction * hitForce, ForceMode2D.Force);
                 player.TakeDamage(damage);
                 rb.AddForce(-direction * hitForce, ForceMode2D.Force);
-                StartCoroutine(AttackWait(EnemyState.Chase, attackWaiting));
+                StartCoroutine(IdleWait( attackWaiting));
             }
-            else if(currentEnemyState != EnemyState.Chase)
+            else if(currentEnemyState == EnemyState.Charge)
             {
-                player.rb.AddForce(direction * hitForce * rb.velocity.magnitude, ForceMode2D.Force);
+                player.rb.AddForce(direction * Mathf.Clamp(hitForce * rb.velocity.magnitude, hitForce, chargeForce+hitForce), ForceMode2D.Force);
                 player.TakeDamage(damage);
                 rb.AddForce(-direction * hitForce, ForceMode2D.Force);
-                StartCoroutine(AttackWait(EnemyState.Chase, attackWaiting));
+                StartCoroutine(IdleWait( attackWaiting));
             }
             
         }
