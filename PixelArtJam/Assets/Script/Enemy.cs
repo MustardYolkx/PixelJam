@@ -106,6 +106,15 @@ public abstract class Enemy : MonoBehaviour
         {
             detectRange = originDetectRange;
         }
+        if(currentEnemyState == EnemyState.Patrol)
+        {
+            FaceToPatrolTarget();
+        }
+        else
+        {
+            FaceToPlayer();
+        }
+            
     }
     public void FaceToPatrolTarget()
     {
@@ -113,7 +122,7 @@ public abstract class Enemy : MonoBehaviour
         {
             sprite.transform.localScale = new Vector2(localScaleX,sprite.transform.localScale.y);
         }
-        else
+        else if (transform.position.x > currentTargetPoint.x)
         {
             sprite.transform.localScale = new Vector2(-localScaleX, sprite.transform.localScale.y);
         }
@@ -127,7 +136,7 @@ public abstract class Enemy : MonoBehaviour
             {
                 sprite.transform.localScale = new Vector2(localScaleX, sprite.transform.localScale.y);
             }
-            else
+            else if (transform.position.x < playerScr.transform.position.x)
             {
                 sprite.transform.localScale = new Vector2(-localScaleX, sprite.transform.localScale.y);
             }
