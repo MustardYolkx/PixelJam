@@ -5,10 +5,15 @@ using UnityEngine;
 public class DestroyMe : MonoBehaviour
 {
     public float lifeTime;
+    public bool autoDestroy = true;
     // Start is called before the first frame update
     void Start()
     {
-        DestroyMyself(lifeTime);
+        if(autoDestroy)
+        {
+            DestroyMyself(lifeTime);
+        }
+        
     }
 
     // Update is called once per frame

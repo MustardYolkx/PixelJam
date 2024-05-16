@@ -98,6 +98,7 @@ public class WaterBullet : MonoBehaviour
         {
             Vector2 pushDirection = enemy.transform.position- transform.position;
             enemy.rb.AddForce(pushDirection.normalized * currentPushForce*(2/enemy.mass), ForceMode2D.Force);
+            enemy.TakeDamage(damage);
             
             Destroy(gameObject);
         }

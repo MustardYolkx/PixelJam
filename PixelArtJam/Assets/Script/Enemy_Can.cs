@@ -21,16 +21,22 @@ public class Enemy_Can : Enemy
     // Update is called once per frame
     new void Update()
     {
-        if (currentEnemyState == EnemyState.Patrol)
+        if (isAlive)
         {
-            Patrol();
+            if (currentEnemyState == EnemyState.Patrol)
+            {
+                Patrol();
+            }
+            if (currentEnemyState == EnemyState.Chase)
+            {
+                ChasePlayer(playerScr.transform.position);
+            }
+
+            SearchPlayer();
+            
         }
-        if( currentEnemyState == EnemyState.Chase)
-        {            
-            ChasePlayer(playerScr.transform.position);
-        }
-        SearchPlayer();
         MoveState();
+       base.Update();
     }
 
    private void SearchPlayer()
@@ -53,6 +59,11 @@ public class Enemy_Can : Enemy
         if(player == null&&count == 1)         
         {
             currentEnemyState = EnemyState.Patrol;
+            StateChange();
+            if (alertvfxStore!= null)
+            {
+                alertvfxStore.GetComponentInChildren<DestroyMe>().DestroyMyself(0.1f);
+            }
             
             count = 0;
         }

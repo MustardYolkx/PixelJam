@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D;
 
 public abstract class Enemy : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public abstract class Enemy : MonoBehaviour
     public float damage;
     public float mass = 2;
     public float detectRange = 3;
+    private float originDetectRange;
     public float alertTime = 0.5f;
     /// <summary>
     /// Movement
@@ -28,11 +30,20 @@ public abstract class Enemy : MonoBehaviour
     private int currentPointIndex;
 
     private float drag = 5;
-    private Collider2D col;
-    
+    private Collider2D[] col ;
+
+    private Animator anim;
+    [HideInInspector] public bool isAlive = true;
     [HideInInspector] public PlayerScr playerScr;
     private SpriteRenderer sprite;
     private float localScaleX;
+
+    [Header("VFX")]
+    public GameObject dieEffect;
+    public GameObject alertEffect;
+    public GameObject alerttoChaseEffect;
+    public GameObject alertvfxStore;
+
     public enum EnemyState
     {
         Patrol,
@@ -41,6 +52,7 @@ public abstract class Enemy : MonoBehaviour
         Charge,
         readyPhase,
         Shoot,
+        die,
     }
     public EnemyState currentEnemyState;
 
@@ -53,10 +65,12 @@ public abstract class Enemy : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
+        anim = GetComponentInChildren<Animator>();
         sprite = GetComponentInChildren<SpriteRenderer>();
         localScaleX = sprite.transform.localScale.x;
         rb = GetComponentInChildren<Rigidbody2D>();
-        col= GetComponentInChildren<Collider2D>();
+        col= GetComponentsInChildren<Collider2D>();
+        originDetectRange = detectRange;
         if(patrolPoint!= null)
         {
             patrolArray = patrolPoint.GetComponentsInChildren<MovePoint>();
@@ -79,9 +93,19 @@ public abstract class Enemy : MonoBehaviour
     // Update is called once per frame
     public void Update()
     {
-        
+        if (hp <= 0&&isAlive)
+        {
+            EnemyDie(2);
+        }
 
-
+        if(currentEnemyState == EnemyState.Chase)
+        {
+            detectRange = originDetectRange + 2;
+        }
+        else
+        {
+            detectRange = originDetectRange;
+        }
     }
     public void FaceToPatrolTarget()
     {
@@ -115,32 +139,66 @@ public abstract class Enemy : MonoBehaviour
         if(currentEnemyActionState == EnemyActionState.Idle)
         {
             currenSpeed = 0;
+
+                anim.SetBool("isMove", false);
+            
+            
         }
         else if (currentEnemyActionState == EnemyActionState.Move)
         {
-            currenSpeed= moveSpeed;
+
+                anim.SetBool("isMove", true);
+            
+            currenSpeed = moveSpeed;
         }
     }
 
     public void TakeDamage(float damage)
     {
+        CameraShake.Instance.ShakeCamera(2);
+        anim.SetTrigger("underAtk");
         hp -= damage;
     }
 
-    public void EnemyDie()
+    public void EnemyDie(float aniTime)
     {
-        Destroy(col);
+        
+        StartCoroutine(DiePorcess(aniTime));
+
+    }
+    IEnumerator DiePorcess(float aniTime)
+    {
+        isAlive = false;
+        CameraShake.Instance.ShakeCamera(3);
+        currentEnemyActionState = EnemyActionState.Idle;
+        if (alertvfxStore != null)
+        {
+            alertvfxStore.GetComponentInChildren<DestroyMe>().DestroyMyself(0.1f);
+        }
+        TurnOffCollider();
+        Instantiate(dieEffect,transform.position, Quaternion.identity);
+        yield return new WaitForSeconds(0.4f);
+        anim.SetTrigger("die");
+        yield return new WaitForSeconds(aniTime);
+        
         Destroy(gameObject);
     }
-
     public void TurnOnCollider()
     {
-        col.enabled = true;
+        foreach(Collider2D co in col)
+        {
+            co.enabled = true;
+        }
+       
     }
 
     public void TurnOffCollider()
     {
-        col.enabled = false;
+        foreach (Collider2D co in col)
+        {
+            co.enabled = false;
+        }
+        
     }
     public void StateChange()
     {
@@ -153,12 +211,16 @@ public abstract class Enemy : MonoBehaviour
                 StartCoroutine(AlertTime());
                 
                 break;
+            case EnemyState.Chase:
+                //currentEnemyActionState = EnemyActionState.Move;
+                break;
         }
     }
 
     IEnumerator AlertTime()
     {
         float time = 0;
+        Instantiate(alertEffect,transform);
         while (time < alertTime)
         {
             yield return null;
@@ -166,10 +228,16 @@ public abstract class Enemy : MonoBehaviour
         }
         if(currentEnemyState== EnemyState.Alert)
         {
-            currentEnemyState = EnemyState.Chase;
+            if(alertvfxStore == null)
+            {
+                alertvfxStore = Instantiate(alerttoChaseEffect, transform);
+            }
+            
+            currentEnemyState = EnemyState.Chase;           
         }      
         else 
         {
+            
             currentEnemyState = EnemyState.Patrol;
         }
     }
