@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class PlayerScr : MonoBehaviour
 {
     private Camera cam;
     private SpriteRenderer sprite;
+    public SpriteRenderer gunSprite;
+    
     private float localScaleX;
     /// <summary>
     /// Player Attribute
@@ -36,6 +39,9 @@ public class PlayerScr : MonoBehaviour
     public float waterStorage;
     public float waterStorageCap;
     public float waterUptakeSpeed;
+    public GameObject waterCapcityTargetPos;
+    public GameObject waterCapSprite;
+    private Vector2 waterStorageOriginPos;
     private bool canAbsorb;
     /// <summary>
     /// Shoot
@@ -43,6 +49,8 @@ public class PlayerScr : MonoBehaviour
     [Header("Shoot")]
     public GameObject singleWaterBullet;
     public GameObject waterBullt;
+    private float shootDelayTimeCount;
+    public float shootDelay;
     public float bulletTime;
     public float singleBulletTime;
     public float bulletWaterConsume;
@@ -56,8 +64,8 @@ public class PlayerScr : MonoBehaviour
     /// <summary>
     /// Generate Line Render
     /// </summary>
-    
 
+    public GameObject targetLineRender;
     private LineRenderer line;
     [SerializeField] private float lineWidth = 1f;
     [SerializeField] private Material lineMaterial;
@@ -75,7 +83,7 @@ public class PlayerScr : MonoBehaviour
     /// </summary>
     [Header("Animation")]
     Animator anim;
-
+    public Animator gunAnim;
     // Start is called before the first frame update
     void Start()
     {
@@ -85,18 +93,18 @@ public class PlayerScr : MonoBehaviour
         cam = FindObjectOfType<Camera>();
         rb = GetComponentInParent<Rigidbody2D>();
         playerTrans = GetComponentInParent<Transform>();
-        if (!this.GetComponent<LineRenderer>())
+        if (!targetLineRender.GetComponent<LineRenderer>())
         {
-            line = this.gameObject.AddComponent<LineRenderer>();
+            line = targetLineRender.gameObject.AddComponent<LineRenderer>();
             line.startWidth = lineWidth;
             line.endWidth = lineWidth;
             line.material = lineMaterial;
         }
         else
         {
-            line = GetComponent<LineRenderer>();
+            line = targetLineRender. GetComponent<LineRenderer>();
         }
-        
+        waterStorageOriginPos = waterCapSprite.transform.localPosition;
     }
 
     private void FixedUpdate()
@@ -106,7 +114,7 @@ public class PlayerScr : MonoBehaviour
             MovePlayer();
             SpriteFaceDirection();
         }
-        
+        GunFollowMouse();
     }
     // Update is called once per frame
     void Update()
@@ -118,16 +126,21 @@ public class PlayerScr : MonoBehaviour
         ChangeState();
         ChangeAnim();
         canAbsorb = !Input.GetMouseButton(0)&&!Input.GetMouseButton(1)&&moveDireciton==Vector2.zero;
-
+        gunAnim.SetBool("Shooting",Input.GetMouseButton(0));
         
-            WaterUptake();
-
-
+        WaterUptake();
         
-        
+        ChangeWaterSpriteCapcity();
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            shootDelayTimeCount = 0;
+            gunAnim.SetTrigger("Shoot");
+        }
 
         if (Input.GetMouseButton(0))
         {
+            shootDelayTimeCount += Time.deltaTime;
             CameraShake.Instance.ShakeCameraCustom();
             Shoot();
             //GenerateLineRender();
@@ -138,7 +151,7 @@ public class PlayerScr : MonoBehaviour
         {
             ShootRightMouse();
             CameraShake.Instance.ShakeCamera(1f);
-            anim.SetTrigger("ShootSingle");
+            gunAnim.SetTrigger("ShootSingle");
         }
         GenerateLineRender();
         shootVFX.SetActive(Input.GetMouseButton(0));
@@ -159,7 +172,7 @@ public class PlayerScr : MonoBehaviour
     private void ChangeAnim()
     {
         anim.SetBool("isMove", currentState == PlayerState.Move);
-        anim.SetBool("isShoot", currentState == PlayerState.Shoot);
+        gunAnim.SetBool("Shooting", currentState == PlayerState.Shoot);
         
     }
     private void ChangeState()
@@ -257,17 +270,21 @@ public class PlayerScr : MonoBehaviour
 
     }
     private void Shoot()
-    {
+    {        
         if (waterStorage > 0)
         {
-            if (timeCount > bulletTime)
+            if(shootDelayTimeCount>shootDelay)
             {
-                GameObject waterBullet = Instantiate(waterBullt, transform.position, Quaternion.identity);
-                waterBullet.GetComponent<WaterBullet>().direction = (new Vector2(mouseFollow.transform.position.x, mouseFollow.transform.position.y) - new Vector2(transform.position.x, transform.position.y)) .normalized;
-                waterBulletPos.Add(waterBullet);
-                waterStorage-=bulletWaterConsume*Time.deltaTime;
-                timeCount = 0;
+                if (timeCount > bulletTime)
+                {
+                    GameObject waterBullet = Instantiate(waterBullt, targetLineRender.transform.position, Quaternion.identity);
+                    waterBullet.GetComponent<WaterBullet>().direction = (new Vector2(mouseFollow.transform.position.x, mouseFollow.transform.position.y) - new Vector2(transform.position.x, transform.position.y)).normalized;
+                    waterBulletPos.Add(waterBullet);
+                    waterStorage -= bulletWaterConsume * Time.deltaTime;
+                    timeCount = 0;
+                }
             }
+            
             
         }
     }
@@ -315,5 +332,38 @@ public class PlayerScr : MonoBehaviour
     {
         CameraShake.Instance.ShakeCamera(2);
         currentHP -= damage;
+    }
+
+    public void GunFollowMouse()
+    {
+        Vector2 direction = (mousePos - new Vector2(gunSprite.transform.position.x, gunSprite.transform.position.y)).normalized;
+        float angle = Vector2.Angle(direction, Vector2.right);
+
+        if (mouseFollow.transform.position.y> gunSprite.transform.position.y)
+        {
+           
+            gunSprite.transform.rotation = Quaternion.Euler(0, 0, angle);
+        }
+        else
+        {
+           
+            gunSprite.transform.rotation = Quaternion.Euler(0, 0, -angle);
+        }
+        if(mouseFollow.transform.position.x> gunSprite.transform.position.x)
+        {
+            gunSprite.transform.localScale = new Vector3(1, 1, 1);
+            
+        }
+        else if(mouseFollow.transform.position.x < gunSprite.transform.position.x-0.5f)
+        {
+            gunSprite.transform.localScale = new Vector3(1, -1, 1);
+            
+        }
+    }
+    public void ChangeWaterSpriteCapcity()
+    {
+        float proportion = waterStorage / waterStorageCap;
+        
+        waterCapSprite.transform.localPosition = Vector2.Lerp(waterCapcityTargetPos.transform.localPosition, waterStorageOriginPos, proportion);
     }
 }

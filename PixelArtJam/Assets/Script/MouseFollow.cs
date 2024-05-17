@@ -6,6 +6,7 @@ public class MouseFollow : MonoBehaviour
 {
     private Vector3 mousePos;
     public float followSmooth;
+    public float followSmoothQuick;
     private Camera cam;
     // Start is called before the first frame update
     void Start()
@@ -26,7 +27,11 @@ public class MouseFollow : MonoBehaviour
         }
         else
         {
-            transform.position = mousePos;
+            if (Vector2.Distance(transform.position, mousePos) > 0.1f)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, mousePos, Time.deltaTime * followSmoothQuick);
+            }
+            
         }
         
     }
