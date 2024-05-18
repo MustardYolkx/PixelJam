@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.U2D;
 
 public abstract class Enemy : MonoBehaviour
@@ -24,7 +25,9 @@ public abstract class Enemy : MonoBehaviour
     public GameObject patrolPoint;
     private MovePoint[] patrolArray;
     private List<MovePoint> patrolList = new List<MovePoint>();
-
+    public bool isMovable;
+    public bool canDestroyed;
+    public bool isOnground;
     private Vector2 currentTargetPoint;
     private MovePoint firstTargetPoint;
     private int currentPointIndex;
@@ -44,6 +47,12 @@ public abstract class Enemy : MonoBehaviour
     public GameObject alerttoChaseEffect;
     public GameObject alertvfxStore;
 
+    [HideInInspector]public bool isTriggerDoor;
+    [HideInInspector] public Door targetDoor;
+
+    //[HideInInspector] public bool isTriggerLevel;
+    /*[HideInInspector]*/ public GameRoot level1Condition;
+
     public enum EnemyState
     {
         Patrol,
@@ -62,9 +71,14 @@ public abstract class Enemy : MonoBehaviour
         Move,
     }
     public EnemyActionState currentEnemyActionState;
+    public int patrolIndex;
+    private GameObject targetPatrolRoute;
     // Start is called before the first frame update
     public void Start()
     {
+        
+        level1Condition = FindObjectOfType<GameRoot>();
+        
         anim = GetComponentInChildren<Animator>();
         sprite = GetComponentInChildren<SpriteRenderer>();
         localScaleX = sprite.transform.localScale.x;
@@ -85,6 +99,37 @@ public abstract class Enemy : MonoBehaviour
                 }
             }
             SetFirstPatrolPoint();
+        }
+        else
+        {
+            EnemyPatrolPoint[] patrolPoint = FindObjectsOfType<EnemyPatrolPoint>();
+            if(patrolPoint != null)
+            {
+                foreach (EnemyPatrolPoint point in patrolPoint)
+                {
+                    if (point.index == patrolIndex)
+                    {
+                        targetPatrolRoute = point.gameObject;
+                    }
+                }
+                if(targetPatrolRoute != null)
+                {
+                    patrolArray = targetPatrolRoute.GetComponentsInChildren<MovePoint>();
+                    foreach (MovePoint p in patrolArray)
+                    {
+                        patrolList.Add(p);
+                        if (p.index == 1)
+                        {
+                            firstTargetPoint = p;
+                            currentTargetPoint = p.transform.position;
+                            currentPointIndex = p.index;
+                        }
+                    }
+                    SetFirstPatrolPoint();
+                }
+                
+            }
+            
         }
         currenSpeed = moveSpeed;
         rb.drag= drag;
@@ -189,7 +234,7 @@ public abstract class Enemy : MonoBehaviour
         yield return new WaitForSeconds(0.4f);
         anim.SetTrigger("die");
         yield return new WaitForSeconds(aniTime);
-        
+        TriggerDoor();
         Destroy(gameObject);
     }
     public void TurnOnCollider()
@@ -342,4 +387,20 @@ public abstract class Enemy : MonoBehaviour
         transform.position = Vector2.MoveTowards(transform.position,player, currenSpeed * Time.deltaTime);
     }
     #endregion
+
+    public void TriggerDoor()
+    {
+        if(targetDoor!=null)
+        {
+            if(isTriggerDoor == true)
+            {
+                targetDoor.Open();
+            }
+        }
+    }
+
+    public void AddThisEnemyToGameRoot()
+    {
+        level1Condition.AddObjToList(this.gameObject);
+    }
 }

@@ -9,12 +9,20 @@ public class Enemy_Can : Enemy
     public float hitForce;
     public float attackWaiting =1.3f;
     public LayerMask playerLayer;
+
     
     private int count;
     // Start is called before the first frame update
     new void Start()
     {
-        currentEnemyActionState = EnemyActionState.Move;
+        if (isMovable)
+        {
+            currentEnemyActionState = EnemyActionState.Move;
+        }
+        else
+        {
+            currentEnemyActionState = EnemyActionState.Idle;
+        }
         base.Start();
     }
 
@@ -23,16 +31,20 @@ public class Enemy_Can : Enemy
     {
         if (isAlive)
         {
-            if (currentEnemyState == EnemyState.Patrol)
+            if(isMovable)
             {
-                Patrol();
-            }
-            if (currentEnemyState == EnemyState.Chase)
-            {
-                ChasePlayer(playerScr.transform.position);
-            }
+                if (currentEnemyState == EnemyState.Patrol)
+                {
+                    Patrol();
+                }
+                if (currentEnemyState == EnemyState.Chase)
+                {
+                    ChasePlayer(playerScr.transform.position);
+                }
 
-            SearchPlayer();
+                SearchPlayer();
+            }
+           
             
         }
         MoveState();

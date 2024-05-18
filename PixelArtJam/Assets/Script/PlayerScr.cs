@@ -8,7 +8,8 @@ public class PlayerScr : MonoBehaviour
     private Camera cam;
     private SpriteRenderer sprite;
     public SpriteRenderer gunSprite;
-    
+    public GameObject playerSpawnPoint;
+
     private float localScaleX;
     /// <summary>
     /// Player Attribute
@@ -22,7 +23,7 @@ public class PlayerScr : MonoBehaviour
     [Header("Movement")]
     public float moveSpeed; // player Speed
     public float goundDrag;
-
+    public bool isOnGround;
     [HideInInspector]public bool isMovable;
     float horizonInput;
     float verticalInput;
@@ -40,9 +41,19 @@ public class PlayerScr : MonoBehaviour
     public float waterStorageCap;
     public float waterUptakeSpeed;
     public GameObject waterCapcityTargetPos;
+    public GameObject waterCapcityLargeTargetPos;
+
     public GameObject waterCapSprite;
+    public GameObject waterCapSpriteCom;
+    public GameObject waterCapLargeSprite;
+    public GameObject waterCapLargeSpriteCom;
+    private Vector2 waterLargeStorageOriginPos;
     private Vector2 waterStorageOriginPos;
     private bool canAbsorb;
+    private float uptakeReadyTimeCount;
+    public float uptakeReadyTime;
+    public float uptakeCoolDownTime;
+    private float uptakeCoolDownTimeCount = 99;
     /// <summary>
     /// Shoot
     /// </summary>
@@ -75,6 +86,7 @@ public class PlayerScr : MonoBehaviour
         Idle,
         Move,
         Shoot,
+        UptakeWater,
     }
     public PlayerState currentState;
 
@@ -84,6 +96,8 @@ public class PlayerScr : MonoBehaviour
     [Header("Animation")]
     Animator anim;
     public Animator gunAnim;
+
+    private bool isAlive = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -105,6 +119,7 @@ public class PlayerScr : MonoBehaviour
             line = targetLineRender. GetComponent<LineRenderer>();
         }
         waterStorageOriginPos = waterCapSprite.transform.localPosition;
+        waterLargeStorageOriginPos = waterCapLargeSprite.transform.localPosition;
     }
 
     private void FixedUpdate()
@@ -119,43 +134,69 @@ public class PlayerScr : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MyInput();
-        CheckWaterStorage();
-        MousePosCheck();
-        CheckMoveState();
-        ChangeState();
-        ChangeAnim();
-        canAbsorb = !Input.GetMouseButton(0)&&!Input.GetMouseButton(1)&&moveDireciton==Vector2.zero;
-        gunAnim.SetBool("Shooting",Input.GetMouseButton(0));
-        
-        WaterUptake();
-        
-        ChangeWaterSpriteCapcity();
-
-        if (Input.GetMouseButtonDown(0))
+        if(isAlive)
         {
-            shootDelayTimeCount = 0;
-            gunAnim.SetTrigger("Shoot");
-        }
+            MyInput();
+            CheckWaterStorage();
+            MousePosCheck();
+            CheckMoveState();
+            ChangeState();
+            ChangeAnim();
+            canAbsorb = !Input.GetMouseButton(0) && !Input.GetMouseButton(1) && moveDireciton == Vector2.zero && uptakeCoolDownTimeCount > uptakeCoolDownTime;
+            gunAnim.SetBool("Shooting", Input.GetMouseButton(0));
+            //anim.SetBool("UptakeWater", canAbsorb&&Input.GetKey(KeyCode.R));
+            WaterUptake();
+            TimeCount();
+            ChangeWaterSpriteCapcity();
+            gunSprite.gameObject.SetActive(currentState != PlayerState.UptakeWater && isAlive);
 
-        if (Input.GetMouseButton(0))
-        {
-            shootDelayTimeCount += Time.deltaTime;
-            CameraShake.Instance.ShakeCameraCustom();
-            Shoot();
-            //GenerateLineRender();
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                shootDelayTimeCount = 0;
+                gunAnim.SetTrigger("Shoot");
+            }
+
+            if (Input.GetMouseButton(0))
+            {
+                shootDelayTimeCount += Time.deltaTime;
+                CameraShake.Instance.ShakeCameraCustom();
+                Shoot();
+                //GenerateLineRender();
+            }
+
+            rb.drag = goundDrag;
+            if (Input.GetMouseButtonDown(1))
+            {
+                ShootRightMouse();
+                CameraShake.Instance.ShakeCamera(1f);
+                gunAnim.SetTrigger("ShootSingle");
+            }
+            GenerateLineRender();
+            shootVFX.SetActive(Input.GetMouseButton(0));
+            shootVFX.transform.LookAt(mouseFollow.transform.position);
         }
+        
+    }
+    private void TimeCount()
+    {
+        ///Uptake Water////
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            uptakeReadyTimeCount = 0;
+            anim.SetTrigger("UptakeWaterTrigger");
+        }
+        if(Input.GetKey(KeyCode.R))
+        {
+            
+            uptakeReadyTimeCount += Time.deltaTime;
+        }
+        if(Input.GetKeyUp(KeyCode.R))
+        {
+            uptakeCoolDownTimeCount = 0;
+        }
+        uptakeCoolDownTimeCount += Time.deltaTime;
         timeCount += Time.deltaTime;
-         rb.drag = goundDrag;
-        if (Input.GetMouseButtonDown(1))
-        {
-            ShootRightMouse();
-            CameraShake.Instance.ShakeCamera(1f);
-            gunAnim.SetTrigger("ShootSingle");
-        }
-        GenerateLineRender();
-        shootVFX.SetActive(Input.GetMouseButton(0));
-        shootVFX.transform.LookAt(mouseFollow.transform.position);
     }
     private void CheckMoveState()
     {
@@ -184,6 +225,10 @@ public class PlayerScr : MonoBehaviour
         else if (Input.GetMouseButton(0))
         {
             currentState = PlayerState.Shoot;
+        }
+        else if (Input.GetKey(KeyCode.R))
+        {
+            currentState = PlayerState.UptakeWater;
         }
         else
         {
@@ -222,6 +267,24 @@ public class PlayerScr : MonoBehaviour
             waterStorage = 0;
         }
     }
+    #region
+    public void SetWaterCapSpriteTrue()
+    {
+        waterCapSpriteCom.gameObject.SetActive(true);
+    }
+    public void SetWaterCapSpriteFalse()
+    {
+        waterCapSpriteCom.gameObject.SetActive(false);
+    }
+    public void SetWaterLargeCapSpriteTrue()
+    {
+        waterCapLargeSpriteCom.gameObject.SetActive(true);
+    }
+    public void SetWaterLargeCapSpriteFalse()
+    {
+        waterCapLargeSpriteCom.gameObject.SetActive(false);
+    }
+    #endregion
     private void WaterUptake()
     {
         Collider2D collider = Physics2D.OverlapCircle(transform.position, 0.3f,waterLayer); // Get collider if nearby object is water
@@ -234,32 +297,44 @@ public class PlayerScr : MonoBehaviour
                 {
                     if (Input.GetKey(KeyCode.R))                       
                     {
-                        anim.SetBool("uptakeWater", true);
-                        if (nearbyWater.storage > 0 && waterStorage < waterStorageCap)
+                        anim.SetBool("UptakeWater", true);
+                        
+                        if (uptakeReadyTimeCount>uptakeReadyTime)
                         {
-                            waterStorage += waterUptakeSpeed * Time.deltaTime;
-                            nearbyWater.storage -= waterUptakeSpeed * Time.deltaTime;
+                            
+                            if (nearbyWater.storage > 0 && waterStorage < waterStorageCap)
+                            {
+                                waterStorage += waterUptakeSpeed * Time.deltaTime;
+                                nearbyWater.storage -= waterUptakeSpeed * Time.deltaTime;
+                            }
                         }
+                        
                     }
                     else
                     {
-                        anim.SetBool("uptakeWater", false);
+
+                        
+                        anim.SetBool("UptakeWater", false);
+                        
                     }
                 }
                 else
                 {
-                    anim.SetBool("uptakeWater", false);
+                    
+                    anim.SetBool("UptakeWater", false);
                 }
 
             }
             else
             {
-                anim.SetBool("uptakeWater", false);
+                
+                anim.SetBool("UptakeWater", false);
             }
         }
         else
         {
-            anim.SetBool("uptakeWater", false);
+            
+            anim.SetBool("UptakeWater", false);
         }
     }
 
@@ -332,8 +407,47 @@ public class PlayerScr : MonoBehaviour
     {
         CameraShake.Instance.ShakeCamera(2);
         currentHP -= damage;
+        anim.SetTrigger("UnderAtk");
+        StartCoroutine(TakeDmgProcess());
     }
 
+    public void Die()
+    {
+       
+    }
+
+    IEnumerator DieProcess()
+    {
+        yield return new WaitForSeconds(4);
+        if(isAlive)
+        {
+            //Destroy(gameObject);
+        }
+        else
+        {
+            transform.position = playerSpawnPoint.transform.position;
+            isAlive = true;
+            isMovable = true;
+            gunSprite.gameObject.SetActive(true);
+            waterCapSpriteCom.SetActive(true);
+            anim.SetTrigger("Alive");
+        }
+    }
+    public void FallingDown()
+    {
+        anim.SetTrigger("FallingDown");
+        isAlive = false;
+        isMovable= false;
+        gunSprite.gameObject.SetActive(false);
+        waterCapSpriteCom.SetActive(false);
+        StartCoroutine(DieProcess());
+    }
+    IEnumerator TakeDmgProcess()
+    {
+        waterCapSprite.gameObject.SetActive(false);
+        yield return new WaitForSeconds(0.1f);
+        waterCapSprite.gameObject.SetActive(true);
+    }
     public void GunFollowMouse()
     {
         Vector2 direction = (mousePos - new Vector2(gunSprite.transform.position.x, gunSprite.transform.position.y)).normalized;
@@ -363,7 +477,7 @@ public class PlayerScr : MonoBehaviour
     public void ChangeWaterSpriteCapcity()
     {
         float proportion = waterStorage / waterStorageCap;
-        
+       waterCapLargeSprite.transform.localPosition = Vector2.Lerp(waterCapcityLargeTargetPos.transform.localPosition, waterLargeStorageOriginPos, proportion);
         waterCapSprite.transform.localPosition = Vector2.Lerp(waterCapcityTargetPos.transform.localPosition, waterStorageOriginPos, proportion);
     }
 }
