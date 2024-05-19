@@ -205,6 +205,7 @@ MonoBehaviour:
   alertvfxStore: {fileID: 0}
   isTriggerDoor: 0
   targetDoor: {fileID: 0}
+  level1Condition: {fileID: 0}
   currentEnemyState: 0
   currentEnemyActionState: 0
   patrolIndex: 0
