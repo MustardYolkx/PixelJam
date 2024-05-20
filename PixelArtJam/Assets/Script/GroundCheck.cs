@@ -48,6 +48,7 @@ public class GroundCheck : MonoBehaviour
         if(enemy!=null)
         {
             enemy.isOnground= false;
+            enemy.FallingDown();
         }
     }
 }

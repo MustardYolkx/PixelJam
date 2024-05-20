@@ -47,9 +47,12 @@ public abstract class Enemy : MonoBehaviour
     public GameObject alerttoChaseEffect;
     public GameObject alertvfxStore;
 
+    /// <summary>
+    /// Die
+    /// </summary>
     [HideInInspector]public bool isTriggerDoor;
     [HideInInspector] public Door targetDoor;
-
+    [HideInInspector] public bool groundUpCheck;
     //[HideInInspector] public bool isTriggerLevel;
     [HideInInspector] public GameRoot level1Condition;
 
@@ -213,7 +216,36 @@ public abstract class Enemy : MonoBehaviour
         anim.SetTrigger("underAtk");
         hp -= damage;
     }
-
+    public void FallingDown()
+    {
+        if(isAlive)
+        {
+            StartCoroutine(FallingProcess());
+        }
+        
+    }
+    public void DestroyedThis()
+    {
+        TriggerDoor();
+        Destroy(gameObject);
+    }
+    IEnumerator FallingProcess()
+    {
+        isAlive = false;
+        currentEnemyActionState = EnemyActionState.Idle;
+        if (groundUpCheck)
+        {
+            sprite.sortingLayerName = "Default";
+            sprite.sortingOrder = 0;
+        }
+        anim.SetTrigger("FallingDown");
+        if (alertvfxStore != null)
+        {
+            alertvfxStore.GetComponentInChildren<DestroyMe>().DestroyMyself(0.1f);
+        }
+        TurnOffCollider();
+        yield return new WaitForSeconds(0.4f);
+    }
     public void EnemyDie(float aniTime)
     {
         

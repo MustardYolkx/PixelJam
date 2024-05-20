@@ -20,7 +20,14 @@ public class Enemy_PowerGarbage : Enemy
     // Start is called before the first frame update
     new void Start()
     {
-        currentEnemyActionState = EnemyActionState.Move;
+        if (isMovable)
+        {
+            currentEnemyActionState = EnemyActionState.Move;
+        }
+        else
+        {
+            currentEnemyActionState = EnemyActionState.Idle;
+        }
         base.Start();
     }
 
@@ -48,6 +55,7 @@ public class Enemy_PowerGarbage : Enemy
         attackTimeCount += Time.deltaTime;
         SearchPlayer();
         MoveState();
+        base.Update();
     }
 
     IEnumerator AttackDelay()

@@ -31,7 +31,7 @@ public class OceanDamage : MonoBehaviour
             {
                 if (!enemy.isOnground)
                 {
-                    enemy.TakeDamage(damage);
+                    //enemy.TakeDamage(damage);
                     timeCount = 0;
                 }
             }

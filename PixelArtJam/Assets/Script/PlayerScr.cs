@@ -8,8 +8,11 @@ public class PlayerScr : MonoBehaviour
     private Camera cam;
     private SpriteRenderer sprite;
     public SpriteRenderer gunSprite;
+    /// <summary>
+    /// Die
+    /// </summary>
     public GameObject playerSpawnPoint;
-
+    [HideInInspector] public bool groundUpCheck;
     private float localScaleX;
     /// <summary>
     /// Player Attribute
@@ -151,7 +154,10 @@ public class PlayerScr : MonoBehaviour
             ChangeWaterSpriteCapcity();
             //gunSprite.gameObject.SetActive(currentState != PlayerState.UptakeWater && isAlive);
 
-
+            if (currentHP <= 0)
+            {
+                Die();
+            }
             if (Input.GetMouseButtonDown(0))
             {
                 shootDelayTimeCount = 0;
@@ -424,34 +430,59 @@ public class PlayerScr : MonoBehaviour
 
     public void Die()
     {
-       
+       StartCoroutine(DieProcess());
     }
-
     IEnumerator DieProcess()
     {
-        yield return new WaitForSeconds(4);
-        if(isAlive)
+        isAlive = false;
+        isMovable = false;
+        anim.SetTrigger("Die");
+        gunSprite.gameObject.SetActive(false);
+        waterCapSpriteCom.SetActive(false);
+
+        yield return new WaitForSeconds(1.6f);
+        currentHP = maxHP;
+        transform.position = playerSpawnPoint.transform.position;
+
+        isAlive = true;
+        isMovable = true;
+        gunSprite.gameObject.SetActive(true);
+        waterCapSpriteCom.SetActive(true);
+        anim.SetTrigger("Alive");
+    }
+    IEnumerator FallingProcess()
+    {
+        isAlive = false;
+        isMovable = false;
+        anim.SetTrigger("FallingDown");
+        if (groundUpCheck)
         {
-            //Destroy(gameObject);
+            sprite.sortingLayerName = "Default";
+            sprite.sortingOrder = 0;
         }
-        else
-        {
+              
+        gunSprite.gameObject.SetActive(false);
+        waterCapSpriteCom.SetActive(false);
+        yield return new WaitForSeconds(4);
+
+
             transform.position = playerSpawnPoint.transform.position;
+            sprite.sortingLayerName = "Player";
+            sprite.sortingOrder = 10;
             isAlive = true;
             isMovable = true;
             gunSprite.gameObject.SetActive(true);
             waterCapSpriteCom.SetActive(true);
             anim.SetTrigger("Alive");
-        }
+        
     }
     public void FallingDown()
     {
-        anim.SetTrigger("FallingDown");
-        isAlive = false;
-        isMovable= false;
-        gunSprite.gameObject.SetActive(false);
-        waterCapSpriteCom.SetActive(false);
-        StartCoroutine(DieProcess());
+        if(isAlive)
+        {
+            StartCoroutine(FallingProcess());
+        }     
+       
     }
     IEnumerator TakeDmgProcess()
     {
