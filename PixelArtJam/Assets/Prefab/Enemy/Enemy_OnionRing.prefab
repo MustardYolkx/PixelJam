@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 8988075520148609046}
   - component: {fileID: 8556868273821420810}
   - component: {fileID: 5059756561363958320}
+  - component: {fileID: 374365876060844495}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -137,6 +138,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &374365876060844495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 359251915371155971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8e93f7ff445df4c9877bd73ef2ebb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1311299359471528779
 GameObject:
   m_ObjectHideFlags: 0
@@ -272,6 +285,7 @@ MonoBehaviour:
   alertvfxStore: {fileID: 0}
   isTriggerDoor: 0
   targetDoor: {fileID: 0}
+  groundUpCheck: 0
   level1Condition: {fileID: 0}
   currentEnemyState: 0
   currentEnemyActionState: 0
