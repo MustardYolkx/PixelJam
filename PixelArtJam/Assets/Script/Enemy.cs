@@ -236,7 +236,7 @@ public abstract class Enemy : MonoBehaviour
         isMovable = false;
         if (groundUpCheck)
         {
-            sprite.sortingLayerName = "Default";
+            sprite.sortingLayerName = "Ocean";
             sprite.sortingOrder = 0;
         }
         anim.SetTrigger("FallingDown");

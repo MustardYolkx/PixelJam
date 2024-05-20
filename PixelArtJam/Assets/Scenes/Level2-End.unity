@@ -203,6 +203,18 @@ PrefabInstance:
       propertyPath: m_text
       value: x    3
       objectReference: {fileID: 0}
+    - target: {fileID: 5069851490761308031, guid: c25fd02020b55de4aa85392c66828496, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5069851490761308031, guid: c25fd02020b55de4aa85392c66828496, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 5069851490761308031, guid: c25fd02020b55de4aa85392c66828496, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
     - target: {fileID: 5092184832815634873, guid: c25fd02020b55de4aa85392c66828496, type: 3}
       propertyPath: m_Sprite
       value: 

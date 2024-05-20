@@ -31,6 +31,10 @@ public class GameRoot : MonoBehaviour
         {
             Level1Event();
         }
+        if (currentLevel == Level.level2)
+        {
+            Level2Event();
+        }
     }
 
     public void Level1Event()
@@ -42,7 +46,20 @@ public class GameRoot : MonoBehaviour
                 SceneManager.LoadScene(sceneName);
             }
         }
-        
+
+
+    }
+    public void Level2Event()
+    {
+
+        if (count == 4)
+        {
+            if (eliminateEnemyList[0] == null && eliminateEnemyList[1] == null && eliminateEnemyList[2] == null && eliminateEnemyList[3] == null)
+            {
+                SceneManager.LoadScene(sceneName);
+            }
+        }
+
     }
 
     public void AddObjToList(GameObject obj)

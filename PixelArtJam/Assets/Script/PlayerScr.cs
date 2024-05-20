@@ -493,7 +493,7 @@ public class PlayerScr : MonoBehaviour
         anim.SetTrigger("FallingDown");
         if (groundUpCheck)
         {
-            sprite.sortingLayerName = "Default";
+            sprite.sortingLayerName = "Ocean";
             sprite.sortingOrder = 0;
         }
         TurnOffCollider();
