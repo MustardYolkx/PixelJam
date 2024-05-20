@@ -85,6 +85,11 @@ public class PlayerScr : MonoBehaviour
     [SerializeField] private float lineWidth = 1f;
     [SerializeField] private Material lineMaterial;
 
+    /// <summary>
+    /// Damege Cool Down
+    /// </summary>
+    private float takeDamegeTimeCount;
+    public float takeDamegeTime;
     public enum PlayerState
     {
         Idle,
@@ -205,6 +210,7 @@ public class PlayerScr : MonoBehaviour
         uptakeCoolDownTimeCount += Time.deltaTime;
         timeCount += Time.deltaTime;
         singleBulletTimeCount+= Time.deltaTime;
+        takeDamegeTimeCount += Time.deltaTime;
     }
     private void CheckMoveState()
     {
@@ -422,15 +428,24 @@ public class PlayerScr : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        CameraShake.Instance.ShakeCamera(2);
-        currentHP -= damage;
-        anim.SetTrigger("UnderAtk");
-        StartCoroutine(TakeDmgProcess());
+        if(takeDamegeTimeCount>takeDamegeTime)
+        {
+            CameraShake.Instance.ShakeCamera(2);
+            currentHP -= damage;
+            anim.SetTrigger("UnderAtk");
+            StartCoroutine(TakeDmgProcess());
+            takeDamegeTimeCount = 0;
+        }
+        
     }
 
     public void Die()
     {
-       StartCoroutine(DieProcess());
+        if(isAlive)
+        {
+            StartCoroutine(DieProcess());
+        }
+      
     }
     IEnumerator DieProcess()
     {
