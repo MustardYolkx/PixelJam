@@ -51,7 +51,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
   hp: 10
-  damage: 0
+  damage: 2
   mass: 0.5
   detectRange: 7
   alertTime: 0.5
@@ -336,7 +336,7 @@ MonoBehaviour:
   - {x: 0.12836361, y: -0.47701758, z: 0}
   m_ShapePathHash: 457051653
   m_Mesh: {fileID: 0}
-  m_InstanceId: -365072
+  m_InstanceId: 41010
   m_LocalBounds:
     m_Center: {x: -0.04980755, y: -0.34865496, z: 0}
     m_Extent: {x: 0.252882, y: 0.17817017, z: 0}
