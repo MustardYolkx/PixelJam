@@ -231,7 +231,7 @@ MonoBehaviour:
   rb: {fileID: 0}
   hp: 10
   damage: 0
-  mass: 2
+  mass: 0.8
   detectRange: 5
   alertTime: 0.5
   moveSpeed: 5
