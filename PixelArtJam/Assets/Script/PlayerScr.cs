@@ -8,6 +8,7 @@ public class PlayerScr : MonoBehaviour
     private Camera cam;
     private SpriteRenderer sprite;
     public SpriteRenderer gunSprite;
+    [HideInInspector] public Collider2D[] col;
     /// <summary>
     /// Die
     /// </summary>
@@ -115,6 +116,7 @@ public class PlayerScr : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         cam = FindObjectOfType<Camera>();
         rb = GetComponentInParent<Rigidbody2D>();
+        col = GetComponentsInChildren<Collider2D>();
         playerTrans = GetComponentInParent<Transform>();
         if (!targetLineRender.GetComponent<LineRenderer>())
         {
@@ -454,7 +456,7 @@ public class PlayerScr : MonoBehaviour
         anim.SetTrigger("Die");
         gunSprite.gameObject.SetActive(false);
         waterCapSpriteCom.SetActive(false);
-
+        TurnOffCollider();
         yield return new WaitForSeconds(1.6f);
         currentHP = maxHP;
         transform.position = playerSpawnPoint.transform.position;
@@ -464,6 +466,25 @@ public class PlayerScr : MonoBehaviour
         gunSprite.gameObject.SetActive(true);
         waterCapSpriteCom.SetActive(true);
         anim.SetTrigger("Alive");
+        TurnOnCollider();
+    }
+
+    public void TurnOnCollider()
+    {
+        foreach (Collider2D co in col)
+        {
+            co.enabled = true;
+        }
+
+    }
+
+    public void TurnOffCollider()
+    {
+        foreach (Collider2D co in col)
+        {
+            co.enabled = false;
+        }
+
     }
     IEnumerator FallingProcess()
     {
@@ -475,7 +496,7 @@ public class PlayerScr : MonoBehaviour
             sprite.sortingLayerName = "Default";
             sprite.sortingOrder = 0;
         }
-              
+        TurnOffCollider();
         gunSprite.gameObject.SetActive(false);
         waterCapSpriteCom.SetActive(false);
         yield return new WaitForSeconds(4);
@@ -489,7 +510,9 @@ public class PlayerScr : MonoBehaviour
             gunSprite.gameObject.SetActive(true);
             waterCapSpriteCom.SetActive(true);
             anim.SetTrigger("Alive");
-        
+        TurnOnCollider();
+
+
     }
     public void FallingDown()
     {
