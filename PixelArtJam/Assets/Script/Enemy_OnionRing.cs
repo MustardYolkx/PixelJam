@@ -36,25 +36,29 @@ public class Enemy_OnionRing : Enemy
     // Update is called once per frame
     new void Update()
     {
-        if (currentEnemyState == EnemyState.Patrol)
+        if(isAlive)
         {
-            Patrol();
-        }
-        if (currentEnemyState == EnemyState.Chase)
-        {
-           
-        }
-        if (attackTimeCount > attackCoolDownTime)
-        {
+            if (currentEnemyState == EnemyState.Patrol)
+            {
+                Patrol();
+            }
             if (currentEnemyState == EnemyState.Chase)
             {
-                Attack();
-                attackTimeCount = 0;
-            }
 
+            }
+            if (attackTimeCount > attackCoolDownTime)
+            {
+                if (currentEnemyState == EnemyState.Chase)
+                {
+                    Attack();
+                    attackTimeCount = 0;
+                }
+
+            }
+            attackTimeCount += Time.deltaTime;
+            SearchPlayer();
+            
         }
-        attackTimeCount += Time.deltaTime;
-        SearchPlayer();
         MoveState();
         base.Update();
     }
@@ -75,12 +79,17 @@ public class Enemy_OnionRing : Enemy
             bulletTargetPar.transform.rotation = Quaternion.Euler(0, 0, -angle);
         }
         yield return new WaitForSeconds(1.5f);
+        if (isAlive)
+        {
+            
+        
         GameObject bullet1 = Instantiate(bullet, transform.position, Quaternion.identity);
         bullet1.GetComponent<OnionRingBullet>().direction = (bullet1TargetPos.transform.position - transform.position).normalized;
         GameObject bullet2 = Instantiate(bullet, transform.position, Quaternion.identity);
         bullet2.GetComponent<OnionRingBullet>().direction = (bullet2TargetPos.transform.position - transform.position).normalized;
         GameObject bullet3 = Instantiate(bullet, transform.position, Quaternion.identity);
         bullet3.GetComponent<OnionRingBullet>().direction = (bullet3TargetPos.transform.position - transform.position).normalized;
+        }
         yield return new WaitForSeconds(1.5f);
         anim.SetTrigger("Idle");
         if (Vector2.Distance(transform.position, playerScr.transform.position) < detectRange)

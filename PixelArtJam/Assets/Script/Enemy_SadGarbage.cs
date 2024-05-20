@@ -33,24 +33,28 @@ public class Enemy_SadGarbage : Enemy
     // Update is called once per frame
     new void Update()
     {
-        if (currentEnemyState == EnemyState.Patrol)
+        if(isAlive)
         {
-            Patrol();
-        }
-        if (currentEnemyState == EnemyState.Chase)
-        {
-            ChasePlayer(playerScr.transform.position);
-        }
-        if (attackTimeCount > attackCoolDownTime)
-        {
-            if(currentEnemyState== EnemyState.Chase)
+            if (currentEnemyState == EnemyState.Patrol)
             {
-                Charge();               
+                Patrol();
             }
+            if (currentEnemyState == EnemyState.Chase)
+            {
+                ChasePlayer(playerScr.transform.position);
+            }
+            if (attackTimeCount > attackCoolDownTime)
+            {
+                if (currentEnemyState == EnemyState.Chase)
+                {
+                    Charge();
+                }
+
+            }
+            attackTimeCount += Time.deltaTime;
+            SearchPlayer();
             
         }
-        attackTimeCount += Time.deltaTime;
-        SearchPlayer();
         MoveState();
         base.Update();
     }
@@ -62,7 +66,11 @@ public class Enemy_SadGarbage : Enemy
         Vector2 direction = (playerScr.transform.position - transform.position).normalized;
         attackTimeCount = 0;
         yield return new WaitForSeconds(1.7f);
-        rb.AddForce(direction * chargeForce, ForceMode2D.Force);
+        if (isAlive)
+        {
+            rb.AddForce(direction * chargeForce, ForceMode2D.Force);
+        }
+        
         yield return new WaitForSeconds(1f);
         anim.SetTrigger("Idle");
         if (currentEnemyState!=EnemyState.Patrol)
