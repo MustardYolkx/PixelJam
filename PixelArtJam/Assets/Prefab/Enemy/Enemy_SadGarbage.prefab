@@ -51,7 +51,7 @@ MonoBehaviour:
   rb: {fileID: 0}
   hp: 10
   damage: 0
-  mass: 2
+  mass: 0.5
   detectRange: 5
   alertTime: 0.5
   moveSpeed: 3
@@ -69,6 +69,7 @@ MonoBehaviour:
   alertvfxStore: {fileID: 0}
   isTriggerDoor: 0
   targetDoor: {fileID: 0}
+  groundUpCheck: 0
   level1Condition: {fileID: 0}
   currentEnemyState: 0
   currentEnemyActionState: 0
@@ -199,6 +200,8 @@ GameObject:
   - component: {fileID: 7182046037124992711}
   - component: {fileID: 4844918476035255414}
   - component: {fileID: 350734136050141436}
+  - component: {fileID: 2061528319506432087}
+  - component: {fileID: 4317754119022263054}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -294,3 +297,27 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2061528319506432087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6670259307637030729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8e93f7ff445df4c9877bd73ef2ebb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4317754119022263054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6670259307637030729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8e93f7ff445df4c9877bd73ef2ebb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
