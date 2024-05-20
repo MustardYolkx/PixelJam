@@ -13,6 +13,11 @@ public class PowerGarbageBullet : MonoBehaviour
     public float drag;
     public GameObject banana;
     private float liveTime;
+
+
+    //Add animator
+    Animator animator;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +25,8 @@ public class PowerGarbageBullet : MonoBehaviour
         rb.AddForce(direction * bulletSpeed, ForceMode2D.Force);
         //Destroy(gameObject, lifeTime);
         rb.drag = drag;
+
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -37,10 +44,25 @@ public class PowerGarbageBullet : MonoBehaviour
     {
         if(liveTime>time)
         {
-            Instantiate(banana, transform.position, Quaternion.identity);
-            Destroy(gameObject);
+            animator.SetTrigger("Explode");
+
+            //let collider stop 
+            gameObject.GetComponent<CircleCollider2D>().enabled = false;
+
+            //Instantiate(banana, transform.position, Quaternion.identity);move it to event trigger
+            //Destroy(gameObject); move it to event trigger
         }
-        
+
+    }
+
+    public void Destroy()
+    {
+        Destroy(gameObject);
+    }
+
+    public void CreatBanana()
+    {
+        Instantiate(banana, transform.position, Quaternion.identity);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
