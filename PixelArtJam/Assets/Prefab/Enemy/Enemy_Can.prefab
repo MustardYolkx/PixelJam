@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8737127121184508583}
   - component: {fileID: 3087423582975034037}
   - component: {fileID: 8308947455641502732}
+  - component: {fileID: 1847553849394754074}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -133,10 +134,22 @@ MonoBehaviour:
   - {x: 0.15594673, y: -0.49356812, z: 0}
   m_ShapePathHash: 1498738961
   m_Mesh: {fileID: 0}
-  m_InstanceId: -1344
+  m_InstanceId: -1304
   m_LocalBounds:
     m_Center: {x: -0.08968091, y: -0.44801247, z: 0}
     m_Extent: {x: 0.24562764, y: 0.22491693, z: 0}
+--- !u!114 &1847553849394754074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 108892948427336527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8e93f7ff445df4c9877bd73ef2ebb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3690982808570028485
 GameObject:
   m_ObjectHideFlags: 0
@@ -197,6 +210,7 @@ MonoBehaviour:
   isMovable: 0
   canDestroyed: 1
   isOnground: 1
+  anim: {fileID: 0}
   isAlive: 1
   playerScr: {fileID: 0}
   dieEffect: {fileID: 5347645838421049034, guid: 2a876aff1c2bfb742978c3954bdf809b, type: 3}
