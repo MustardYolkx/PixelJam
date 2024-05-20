@@ -209,8 +209,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
+<<<<<<< HEAD
   m_fontSize: 24
   m_fontSizeBase: 24
+=======
+  m_fontSize: 50
+  m_fontSizeBase: 50
+>>>>>>> level2
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -287,7 +292,11 @@ RectTransform:
   m_GameObject: {fileID: 585369557}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
   m_LocalScale: {x: 4.6503, y: 4.6503, z: 4.6503}
+=======
+  m_LocalScale: {x: 1, y: 1, z: 1}
+>>>>>>> level2
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 242546320}
@@ -295,8 +304,13 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
+<<<<<<< HEAD
   m_AnchoredPosition: {x: 0, y: -201.71799}
   m_SizeDelta: {x: 160, y: 30}
+=======
+  m_AnchoredPosition: {x: 365, y: -295}
+  m_SizeDelta: {x: 648.3844, y: 80.9216}
+>>>>>>> level2
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &585369559
 MonoBehaviour:
@@ -420,7 +434,11 @@ RectTransform:
   m_GameObject: {fileID: 603728935}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
   m_LocalScale: {x: 4.6503, y: 4.6503, z: 4.6503}
+=======
+  m_LocalScale: {x: 1, y: 1, z: 1}
+>>>>>>> level2
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1284193943}
@@ -428,8 +446,13 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
+<<<<<<< HEAD
   m_AnchoredPosition: {x: 0, y: -45}
   m_SizeDelta: {x: 160, y: 30}
+=======
+  m_AnchoredPosition: {x: 365, y: -133}
+  m_SizeDelta: {x: 648.38, y: 85.5509}
+>>>>>>> level2
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &603728937
 MonoBehaviour:
@@ -609,8 +632,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
+<<<<<<< HEAD
   m_fontSize: 24
   m_fontSizeBase: 24
+=======
+  m_fontSize: 50
+  m_fontSizeBase: 50
+>>>>>>> level2
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1009,15 +1037,24 @@ RectTransform:
   m_GameObject: {fileID: 1744102031}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
   m_LocalScale: {x: 4.2353, y: 4.2353, z: 4.2353}
+=======
+  m_LocalScale: {x: 1, y: 1, z: 1}
+>>>>>>> level2
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1740708648}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
+<<<<<<< HEAD
   m_AnchoredPosition: {x: 0.000015259, y: 0}
   m_SizeDelta: {x: 453, y: 255}
+=======
+  m_AnchoredPosition: {x: 0.000030518, y: 0}
+  m_SizeDelta: {x: 1920, y: 1080}
+>>>>>>> level2
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1744102033
 MonoBehaviour:
@@ -1084,15 +1121,24 @@ RectTransform:
   m_GameObject: {fileID: 1877985819}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
   m_LocalScale: {x: 3.8898, y: 3.8898, z: 3.8898}
+=======
+  m_LocalScale: {x: 1, y: 1, z: 1}
+>>>>>>> level2
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1740708648}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
+<<<<<<< HEAD
   m_AnchoredPosition: {x: 0.000015258789, y: -266}
   m_SizeDelta: {x: 283.6826, y: 50}
+=======
+  m_AnchoredPosition: {x: 343, y: -336}
+  m_SizeDelta: {x: 642.4483, y: 184.2479}
+>>>>>>> level2
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1877985821
 MonoBehaviour:
@@ -1114,7 +1160,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+<<<<<<< HEAD
   m_text: IS TITLEEEE
+=======
+  m_text: AquaBlaster
+>>>>>>> level2
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ce5f7d8434106454fbbe32c8464484bb, type: 2}
   m_sharedMaterial: {fileID: 4557598842156144691, guid: ce5f7d8434106454fbbe32c8464484bb, type: 2}
@@ -1141,8 +1191,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
+<<<<<<< HEAD
   m_fontSize: 36
   m_fontSizeBase: 36
+=======
+  m_fontSize: 80
+  m_fontSizeBase: 80
+>>>>>>> level2
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
