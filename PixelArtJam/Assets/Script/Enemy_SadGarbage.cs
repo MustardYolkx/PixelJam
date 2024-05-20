@@ -35,24 +35,28 @@ public class Enemy_SadGarbage : Enemy
     {
         if(isAlive)
         {
-            if (currentEnemyState == EnemyState.Patrol)
+            if(isMovable)
             {
-                Patrol();
-            }
-            if (currentEnemyState == EnemyState.Chase)
-            {
-                ChasePlayer(playerScr.transform.position);
-            }
-            if (attackTimeCount > attackCoolDownTime)
-            {
+                if (currentEnemyState == EnemyState.Patrol)
+                {
+                    Patrol();
+                }
                 if (currentEnemyState == EnemyState.Chase)
                 {
-                    Charge();
+                    ChasePlayer(playerScr.transform.position);
                 }
+                if (attackTimeCount > attackCoolDownTime)
+                {
+                    if (currentEnemyState == EnemyState.Chase)
+                    {
+                        Charge();
+                    }
 
+                }
+                attackTimeCount += Time.deltaTime;
+                SearchPlayer();
             }
-            attackTimeCount += Time.deltaTime;
-            SearchPlayer();
+            
             
         }
         MoveState();

@@ -36,26 +36,30 @@ public class Enemy_PowerGarbage : Enemy
     {
         if(isAlive)
         {
-            if (currentEnemyState == EnemyState.Patrol)
+            if(isMovable)
             {
-                Patrol();
+                if (currentEnemyState == EnemyState.Patrol)
+                {
+                    Patrol();
 
-            }
-            if (currentEnemyState == EnemyState.Chase)
-            {
-
-            }
-            if (attackTimeCount > attackCoolDownTime)
-            {
+                }
                 if (currentEnemyState == EnemyState.Chase)
                 {
-                    Attack();
-                    attackTimeCount = 0;
-                }
 
+                }
+                if (attackTimeCount > attackCoolDownTime)
+                {
+                    if (currentEnemyState == EnemyState.Chase)
+                    {
+                        Attack();
+                        attackTimeCount = 0;
+                    }
+
+                }
+                attackTimeCount += Time.deltaTime;
+                SearchPlayer();
             }
-            attackTimeCount += Time.deltaTime;
-            SearchPlayer();
+            
             
         }
         MoveState();
