@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class PlayerScr : MonoBehaviour
 {
@@ -108,9 +109,12 @@ public class PlayerScr : MonoBehaviour
     public Animator gunAnim;
 
     private bool isAlive = true;
+
+    private string thisSceneName;
     // Start is called before the first frame update
     void Start()
     {
+        thisSceneName = SceneManager.GetActiveScene().name;
         sprite = GetComponentInChildren<SpriteRenderer>();
         localScaleX = sprite.transform.localScale.x;
         anim = GetComponentInChildren<Animator>();
@@ -451,6 +455,7 @@ public class PlayerScr : MonoBehaviour
     }
     IEnumerator DieProcess()
     {
+        
         isAlive = false;
         isMovable = false;
         anim.SetTrigger("Die");
@@ -458,6 +463,7 @@ public class PlayerScr : MonoBehaviour
         waterCapSpriteCom.SetActive(false);
         TurnOffCollider();
         yield return new WaitForSeconds(1.6f);
+        SceneManager.LoadScene(thisSceneName);
         currentHP = maxHP;
         transform.position = playerSpawnPoint.transform.position;
 
@@ -501,8 +507,8 @@ public class PlayerScr : MonoBehaviour
         waterCapSpriteCom.SetActive(false);
         yield return new WaitForSeconds(4);
 
-
-            transform.position = playerSpawnPoint.transform.position;
+        SceneManager.LoadScene(thisSceneName);
+        transform.position = playerSpawnPoint.transform.position;
             sprite.sortingLayerName = "Player";
             sprite.sortingOrder = 10;
             isAlive = true;
