@@ -34,26 +34,30 @@ public class Enemy_PowerGarbage : Enemy
     // Update is called once per frame
     new void Update()
     {
-        if (currentEnemyState == EnemyState.Patrol)
+        if(isAlive)
         {
-            Patrol();
-            
-        }
-        if (currentEnemyState == EnemyState.Chase)
-        {
+            if (currentEnemyState == EnemyState.Patrol)
+            {
+                Patrol();
 
-        }
-        if (attackTimeCount > attackCoolDownTime)
-        {
+            }
             if (currentEnemyState == EnemyState.Chase)
             {
-                Attack();
-                attackTimeCount = 0;
-            }
 
+            }
+            if (attackTimeCount > attackCoolDownTime)
+            {
+                if (currentEnemyState == EnemyState.Chase)
+                {
+                    Attack();
+                    attackTimeCount = 0;
+                }
+
+            }
+            attackTimeCount += Time.deltaTime;
+            SearchPlayer();
+            
         }
-        attackTimeCount += Time.deltaTime;
-        SearchPlayer();
         MoveState();
         base.Update();
     }
@@ -66,8 +70,12 @@ public class Enemy_PowerGarbage : Enemy
         
         
         yield return new WaitForSeconds(1.5f);
-        GameObject bullet1 = Instantiate(bullet, transform.position, Quaternion.identity);
-        bullet1.GetComponent<PowerGarbageBullet>().direction = direction;
+        if (isAlive)
+        {
+            GameObject bullet1 = Instantiate(bullet, transform.position, Quaternion.identity);
+            bullet1.GetComponent<PowerGarbageBullet>().direction = direction;
+        }
+        
         
         yield return new WaitForSeconds(1.5f);
         anim.SetTrigger("Idle");

@@ -233,6 +233,7 @@ public abstract class Enemy : MonoBehaviour
     {
         isAlive = false;
         currentEnemyActionState = EnemyActionState.Idle;
+        isMovable = false;
         if (groundUpCheck)
         {
             sprite.sortingLayerName = "Default";
