@@ -88,6 +88,7 @@ public class Enemy_Can : Enemy
         {
             Vector2 direction = (collision.transform.position - transform.position).normalized;
             player.rb.AddForce(direction * hitForce,ForceMode2D.Force);
+            
             player.TakeDamage(damage);
             rb.AddForce(-direction * hitForce,ForceMode2D.Force);
             StartCoroutine(IdleWait(attackWaiting));

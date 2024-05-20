@@ -245,6 +245,7 @@ public abstract class Enemy : MonoBehaviour
         }
         TurnOffCollider();
         yield return new WaitForSeconds(0.4f);
+        
     }
     public void EnemyDie(float aniTime)
     {
