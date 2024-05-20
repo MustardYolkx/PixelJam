@@ -12,6 +12,8 @@ public class GameRoot : MonoBehaviour
     }
     public Level currentLevel;
 
+    public string sceneName;
+
     public List<GameObject> eliminateEnemyList ;
 
     public bool triggerStart;
@@ -37,7 +39,7 @@ public class GameRoot : MonoBehaviour
         {
             if (eliminateEnemyList[0]==null&& eliminateEnemyList[1] == null&&eliminateEnemyList[2] == null&&eliminateEnemyList[3] == null)
             {
-                SceneManager.LoadScene("Level2");
+                SceneManager.LoadScene(sceneName);
             }
         }
         
