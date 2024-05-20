@@ -24,7 +24,7 @@ public class PlayerScr : MonoBehaviour
     public float moveSpeed; // player Speed
     public float goundDrag;
     public bool isOnGround;
-    [HideInInspector]public bool isMovable;
+    /*[HideInInspector]*/public bool isMovable;
     float horizonInput;
     float verticalInput;
 
@@ -69,6 +69,7 @@ public class PlayerScr : MonoBehaviour
     public float singleBulletRecoil;
     private Vector2 mousePos;
     private float timeCount;
+    private float singleBulletTimeCount;
     private List<GameObject> waterBulletPos = new List<GameObject>();
     public GameObject shootVFX;
     public GameObject mouseFollow;
@@ -148,7 +149,7 @@ public class PlayerScr : MonoBehaviour
             WaterUptake();
             TimeCount();
             ChangeWaterSpriteCapcity();
-            gunSprite.gameObject.SetActive(currentState != PlayerState.UptakeWater && isAlive);
+            //gunSprite.gameObject.SetActive(currentState != PlayerState.UptakeWater && isAlive);
 
 
             if (Input.GetMouseButtonDown(0))
@@ -197,11 +198,12 @@ public class PlayerScr : MonoBehaviour
         }
         uptakeCoolDownTimeCount += Time.deltaTime;
         timeCount += Time.deltaTime;
+        singleBulletTimeCount+= Time.deltaTime;
     }
     private void CheckMoveState()
     {
-        isMovable = !Input.GetMouseButton(0);
-        if (timeCount > singleBulletTime/2)
+        //isMovable = !Input.GetMouseButton(1);
+        if (singleBulletTimeCount > singleBulletTime/2)
         {
             isMovable = true;
         }
@@ -267,7 +269,7 @@ public class PlayerScr : MonoBehaviour
             waterStorage = 0;
         }
     }
-    #region
+    #region AnimTrigger
     public void SetWaterCapSpriteTrue()
     {
         waterCapSpriteCom.gameObject.SetActive(true);
@@ -283,6 +285,15 @@ public class PlayerScr : MonoBehaviour
     public void SetWaterLargeCapSpriteFalse()
     {
         waterCapLargeSpriteCom.gameObject.SetActive(false);
+    }
+
+    public void SetGunSpriteFalse()
+    {
+        gunSprite.gameObject.SetActive(false);
+    }
+    public void SetGunSpriteTrue()
+    {
+        gunSprite.gameObject.SetActive(true);
     }
     #endregion
     private void WaterUptake()
@@ -367,7 +378,7 @@ public class PlayerScr : MonoBehaviour
     {
         if (waterStorage > 0)
         {
-            if (timeCount > singleBulletTime)
+            if (singleBulletTimeCount > singleBulletTime)
             {
                 
                 GameObject waterBullet = Instantiate(singleWaterBullet, transform.position, Quaternion.identity);
@@ -375,7 +386,7 @@ public class PlayerScr : MonoBehaviour
                 waterBullet.GetComponent<WaterBulletSingle>().direction = pushDirection;
                 waterStorage -= singleBulletWaterConsume;
                 rb.AddForce(-pushDirection * singleBulletRecoil,ForceMode2D.Force);
-                timeCount = 0;
+                singleBulletTimeCount = 0;
             }
             
         }

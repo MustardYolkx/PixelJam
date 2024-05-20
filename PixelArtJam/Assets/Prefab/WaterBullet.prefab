@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3320103712315575872}
   - component: {fileID: 737800296557450067}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 8413145398056792448}
   - component: {fileID: 1844650935562696345}
   - component: {fileID: 7533350265141614120}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WaterBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -139,8 +139,8 @@ MonoBehaviour:
   loseScale: 3
   trace: {fileID: 8761423903142806369, guid: 9a9d40a64857fcb47b9261f025e9da4d, type: 3}
   drag: 1
-  pushForceAdd: 20
-  maxPushForce: 100
+  pushForceAdd: 50
+  maxPushForce: 200
   collideParticle: {fileID: 6601223587711235915, guid: f8efaaa51c264bb47acc055debfebab2, type: 3}
 --- !u!61 &1844650935562696345
 BoxCollider2D:

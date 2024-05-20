@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3320103712315575872}
   - component: {fileID: 737800296557450067}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 8654079015460985476}
   - component: {fileID: 1844650935562696345}
   - component: {fileID: 7533350265141614120}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WaterBulletSingle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
