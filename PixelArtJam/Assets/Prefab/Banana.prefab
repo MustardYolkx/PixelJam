@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 6753454591305727208}
   - component: {fileID: 711741890482382001}
   - component: {fileID: 8887157961338136970}
-  m_Layer: 0
+  - component: {fileID: 7409732106321793832}
+  m_Layer: 8
   m_Name: Banana3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49,6 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 0
   hitForce: 400
+  isOnground: 1
 --- !u!114 &6753454591305727208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,6 +160,33 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!50 &7409732106321793832
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6092162770082336568}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &6476387783145206169
 GameObject:
   m_ObjectHideFlags: 0
@@ -171,7 +200,8 @@ GameObject:
   - component: {fileID: 3903227399924287512}
   - component: {fileID: 7075451447299467324}
   - component: {fileID: 1216395964046049386}
-  m_Layer: 0
+  - component: {fileID: 4651271882511924429}
+  m_Layer: 8
   m_Name: Banana2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -207,6 +237,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 0
   hitForce: 400
+  isOnground: 1
 --- !u!114 &3903227399924287512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -316,6 +347,33 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!50 &4651271882511924429
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6476387783145206169}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &6538517603318056723
 GameObject:
   m_ObjectHideFlags: 0
@@ -325,7 +383,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7222378906799063164}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Banana
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -341,7 +399,7 @@ Transform:
   m_GameObject: {fileID: 6538517603318056723}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.015275544}
+  m_LocalPosition: {x: 0, y: 0, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -363,7 +421,8 @@ GameObject:
   - component: {fileID: 8926008874221809603}
   - component: {fileID: 3532142123791117472}
   - component: {fileID: 4075641274983025479}
-  m_Layer: 0
+  - component: {fileID: 6611676720986428912}
+  m_Layer: 8
   m_Name: Banana1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -399,6 +458,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 0
   hitForce: 400
+  isOnground: 1
 --- !u!114 &8926008874221809603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -508,3 +568,30 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!50 &6611676720986428912
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6604081549539165192}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
