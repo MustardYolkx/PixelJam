@@ -291,6 +291,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1178218685408083921, guid: c25fd02020b55de4aa85392c66828496, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 4.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1178218685408083921, guid: c25fd02020b55de4aa85392c66828496, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -47.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4985114292813741438, guid: c25fd02020b55de4aa85392c66828496, type: 3}
+      propertyPath: m_text
+      value: x    6
+      objectReference: {fileID: 0}
     - target: {fileID: 7963810297054116485, guid: c25fd02020b55de4aa85392c66828496, type: 3}
       propertyPath: m_Name
       value: Canvas_LevelEnd
@@ -376,7 +388,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1266826766167362121, guid: c25fd02020b55de4aa85392c66828496, type: 3}
+    - {fileID: 4443573924723471433, guid: c25fd02020b55de4aa85392c66828496, type: 3}
+    - {fileID: 1895397754639234375, guid: c25fd02020b55de4aa85392c66828496, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c25fd02020b55de4aa85392c66828496, type: 3}
