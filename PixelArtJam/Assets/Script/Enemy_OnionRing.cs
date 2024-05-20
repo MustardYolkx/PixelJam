@@ -54,6 +54,7 @@ public class Enemy_OnionRing : Enemy
     IEnumerator AttackDelay()
     {
         currentEnemyState = EnemyState.Shoot;
+        anim.SetTrigger("Ready");
         Vector2 direction = (playerScr.transform.position - transform.position).normalized;
         float angle = Vector2.Angle(direction, Vector2.right);
         
@@ -65,7 +66,7 @@ public class Enemy_OnionRing : Enemy
         {
             bulletTargetPar.transform.rotation = Quaternion.Euler(0, 0, -angle);
         }
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.5f);
         GameObject bullet1 = Instantiate(bullet, transform.position, Quaternion.identity);
         bullet1.GetComponent<OnionRingBullet>().direction = (bullet1TargetPos.transform.position - transform.position).normalized;
         GameObject bullet2 = Instantiate(bullet, transform.position, Quaternion.identity);
@@ -73,6 +74,7 @@ public class Enemy_OnionRing : Enemy
         GameObject bullet3 = Instantiate(bullet, transform.position, Quaternion.identity);
         bullet3.GetComponent<OnionRingBullet>().direction = (bullet3TargetPos.transform.position - transform.position).normalized;
         yield return new WaitForSeconds(1.5f);
+        anim.SetTrigger("Idle");
         if (Vector2.Distance(transform.position, playerScr.transform.position) < detectRange)
         {
             currentEnemyState = EnemyState.Chase;
@@ -80,6 +82,10 @@ public class Enemy_OnionRing : Enemy
         else
         {
             currentEnemyState = EnemyState.Patrol;
+            if (alertvfxStore != null)
+            {
+                alertvfxStore.GetComponentInChildren<DestroyMe>().DestroyMyself(0.1f);
+            }
         }
         
     }
@@ -115,11 +121,17 @@ public class Enemy_OnionRing : Enemy
             if(currentEnemyState!=EnemyState.Shoot)
             {
                 currentEnemyState = EnemyState.Patrol;
+                
                 StartCoroutine(IdleWait( 1f));
-                attackTimeCount= 10;
+                StateChange();
+                if (alertvfxStore != null)
+                {
+                    alertvfxStore.GetComponentInChildren<DestroyMe>().DestroyMyself(0.1f);
+                }
+                attackTimeCount = 10;
             }
-            
 
+           
             count = 0;
         }
     }

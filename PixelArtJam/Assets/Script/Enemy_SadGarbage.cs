@@ -50,12 +50,14 @@ public class Enemy_SadGarbage : Enemy
     IEnumerator ChargeDelay()
     {
         currentEnemyState = EnemyState.Charge;
+        anim.SetTrigger("Ready");
         Vector2 direction = (playerScr.transform.position - transform.position).normalized;
         attackTimeCount = 0;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.7f);
         rb.AddForce(direction * chargeForce, ForceMode2D.Force);
         yield return new WaitForSeconds(1f);
-        if(currentEnemyState!=EnemyState.Patrol)
+        anim.SetTrigger("Idle");
+        if (currentEnemyState!=EnemyState.Patrol)
         {
             currentEnemyState = EnemyState.Chase;
         }
@@ -93,7 +95,11 @@ public class Enemy_SadGarbage : Enemy
         if (player == null && count == 1)
         {
             currentEnemyState = EnemyState.Patrol;
-
+            StateChange();
+            if (alertvfxStore != null)
+            {
+                alertvfxStore.GetComponentInChildren<DestroyMe>().DestroyMyself(0.1f);
+            }
             count = 0;
         }
     }

@@ -35,7 +35,7 @@ public abstract class Enemy : MonoBehaviour
     private float drag = 5;
     private Collider2D[] col ;
 
-    private Animator anim;
+    [HideInInspector] public Animator anim;
     [HideInInspector] public bool isAlive = true;
     [HideInInspector] public PlayerScr playerScr;
     private SpriteRenderer sprite;
@@ -51,7 +51,7 @@ public abstract class Enemy : MonoBehaviour
     [HideInInspector] public Door targetDoor;
 
     //[HideInInspector] public bool isTriggerLevel;
-    /*[HideInInspector]*/ public GameRoot level1Condition;
+    [HideInInspector] public GameRoot level1Condition;
 
     public enum EnemyState
     {

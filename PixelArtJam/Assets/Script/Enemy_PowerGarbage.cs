@@ -30,6 +30,7 @@ public class Enemy_PowerGarbage : Enemy
         if (currentEnemyState == EnemyState.Patrol)
         {
             Patrol();
+            
         }
         if (currentEnemyState == EnemyState.Chase)
         {
@@ -52,20 +53,26 @@ public class Enemy_PowerGarbage : Enemy
     IEnumerator AttackDelay()
     {
         currentEnemyState = EnemyState.Shoot;
+        anim.SetTrigger("Ready");
         Vector2 direction = (playerScr.transform.position - transform.position).normalized;
         
         
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.5f);
         GameObject bullet1 = Instantiate(bullet, transform.position, Quaternion.identity);
         bullet1.GetComponent<PowerGarbageBullet>().direction = direction;
         
         yield return new WaitForSeconds(1.5f);
+        anim.SetTrigger("Idle");
         if (Vector2.Distance(transform.position, playerScr.transform.position) < detectRange)
         {
             currentEnemyState = EnemyState.Chase;
         }
         else
         {
+            if (alertvfxStore != null)
+            {
+                alertvfxStore.GetComponentInChildren<DestroyMe>().DestroyMyself(0.1f);
+            }
             currentEnemyState = EnemyState.Patrol;
         }
 
@@ -99,13 +106,18 @@ public class Enemy_PowerGarbage : Enemy
         }
         if (player == null && count == 1)
         {
-            if (currentEnemyState != EnemyState.Shoot)
+            if(currentEnemyState!= EnemyState.Shoot)
             {
                 currentEnemyState = EnemyState.Patrol;
                 StartCoroutine(IdleWait(1f));
                 attackTimeCount = 10;
-            }
-
+                if (alertvfxStore != null)
+                {
+                    alertvfxStore.GetComponentInChildren<DestroyMe>().DestroyMyself(0.1f);
+                }
+            }                
+            
+            
 
             count = 0;
         }
